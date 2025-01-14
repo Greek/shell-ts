@@ -14,6 +14,11 @@ function loop() {
       return 0;
     }
 
+    if (args[0] == "echo") {
+      console.log(args.join(""))
+      rl.close();
+    }
+
     console.log(`${answer}: command not found`);
 
     loop();
