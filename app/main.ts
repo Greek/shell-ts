@@ -8,9 +8,12 @@ const rl = createInterface({
 function loop() {
   rl.question("$ ", (answer) => {
     const args = answer.split(" ")
-    if (args[0] == "quit") {
+
+    if (args[0] == "exit") {
       rl.close();
+      return 0;
     }
+
     console.log(`${answer}: command not found`);
 
     loop();
