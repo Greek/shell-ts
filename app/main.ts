@@ -11,12 +11,16 @@ function loop() {
 
     if (args[0] == "exit") {
       rl.close();
-      return 0;
+
+      return;
     }
 
     if (args[0] == "echo") {
-      console.log(args.join(""))
-      rl.close();
+      args.shift() // Remove the command from the first idx.
+      console.log(args.join(" ")) // Print out the args.
+      loop();
+
+      return;
     }
 
     console.log(`${answer}: command not found`);
