@@ -1,24 +1,23 @@
 import { createInterface } from "readline";
-import os from "node:os"
+import os from "node:os";
 
 const rl = createInterface({
   input: process.stdin,
   output: process.stdout,
 });
 
-function loop() {
+function loop(badCommand?: boolean, commandName?: string) {
   rl.question("$ ", (answer) => {
-    const args = answer.split(" ")
+    const args = answer.split(" ");
 
     if (args[0] == "exit") {
       rl.close();
-
       return;
     }
 
     if (args[0] == "echo") {
-      args.shift() // Remove the command from the first idx.
-      console.log(args.join(" ")) // Print out the args.
+      args.shift(); // Remove the command from the first idx.
+      console.log(args.join(" ")); // Print out the args.
 
       loop();
 
@@ -26,15 +25,16 @@ function loop() {
     }
 
     if (args[0] == "type") {
-      if (['echo', 'exit', 'type'].includes(args[1])) {
-        console.log(`${args[1]} is a shell builtin`)
+      if (["echo", "exit", "type"].includes(args[1])) {
+        console.log(`${args[1]} is a shell builtin`);
+      } else {
+        console.log(`${args[1]}: not found`);
       }
 
-      loop();
-      return;
+      return loop();
     }
 
-    console.log(`${answer}: command not found`);
+    console.log(`${args[0]}: command not found`);
 
     loop();
   });
