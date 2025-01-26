@@ -18,6 +18,7 @@ export async function type(commandName: string): Promise<void> {
 
     // Open the path
     for await (const d of await fs.promises.opendir(dir)) {
+      console.log(dir);
       if (d.name == commandName) {
         console.log(`${d.name} is ${d.parentPath}/${d.name}`);
         return;
