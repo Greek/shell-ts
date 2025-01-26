@@ -51,7 +51,9 @@ export function loop(retCode?: number) {
       process = spawn(inputCmd, args);
 
       process.stdout.on("data", (data) => {
-        console.log(`${data}`);
+        if (data !== "") {  
+          console.log(`${data}`);
+        }
         return;
       });
 
