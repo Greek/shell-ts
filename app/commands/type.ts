@@ -16,8 +16,8 @@ export async function type(commandName: string): Promise<void> {
       continue;
     }
 
-    let lastPath;
     // Open the path
+    let lastPath;
     for await (const d of await fs.promises.opendir(dir)) {
       lastPath = dir;
 
