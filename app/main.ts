@@ -1,12 +1,13 @@
 import { createInterface } from "readline";
-import os from "node:os";
+import { type } from "./commands/type";
+import { echo } from "./commands/echo";
 
 const rl = createInterface({
   input: process.stdin,
   output: process.stdout,
 });
 
-function loop(badCommand?: boolean, commandName?: string) {
+export function loop() {
   rl.question("$ ", (answer) => {
     const args = answer.split(" ");
 
@@ -16,25 +17,19 @@ function loop(badCommand?: boolean, commandName?: string) {
     }
 
     if (args[0] == "echo") {
-      args.shift(); // Remove the command from the first idx.
-      console.log(args.join(" ")); // Print out the args.
-
-      loop();
-
+      args.shift(); 
+      echo(args.join(" ")).finally(loop)
       return;
     }
 
     if (args[0] == "type") {
-      if (["echo", "exit", "type"].includes(args[1])) {
-        console.log(`${args[1]} is a shell builtin`);
-      } else {
-        console.log(`${args[1]}: not found`);
-      }
-
-      return loop();
+      type(args[1]).finally(loop);
+      return;
     }
 
-    console.log(`${args[0]}: command not found`);
+    if (args[0].length > 0) {
+      console.log(`${args[0]}: command not found`);
+    }
 
     loop();
   });
