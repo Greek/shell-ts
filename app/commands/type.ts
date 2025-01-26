@@ -20,7 +20,7 @@ export async function type(commandName: string): Promise<void> {
     for await (const d of await fs.promises.opendir(dir)) {
       console.log(dir);
       if (d.name == commandName) {
-        console.log(`${d.name} is ${d.parentPath}/${d.name}`);
+        console.log(`${d.name} is ${d.parentPath || d.path}/${d.name}`);
         return;
       }
     }
