@@ -1,4 +1,4 @@
-import fs from "node:fs";
+import fs from "fs";
 
 export async function type(commandName: string): Promise<void> {
   const paths = process.env.PATH?.split(":") as string[];
