@@ -50,15 +50,15 @@ export function loop(retCode?: number) {
     try {
       process = spawn(inputCmd, args);
 
-      process.stdout.on("data", (data) => {
-        if (data !== "") {  
-          console.log(`${data}`);
-        }
+      process.stdout.on("data", (data: string) => {
+        const output = data.toString().trimEnd();
+        console.log(output);
         return;
       });
 
       process.stderr.on("data", (data) => {
-        console.error(`${data}`);
+        const output = data.toString().trimEnd();
+        console.log(output);
         return;
       });
 
