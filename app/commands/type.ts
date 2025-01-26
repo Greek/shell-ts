@@ -20,11 +20,11 @@ export async function type(commandName: string): Promise<void> {
     for await (const d of await fs.promises.opendir(dir)) {
       if (d.name == commandName) {
         console.log(`${d.name} is ${d.parentPath}/${d.name}`);
-        // return `${d.name} is ${d.parentPath}/${d.name}`;
+        return;
       }
     }
   }
 
   console.log(`type: Could not find '${commandName}'`);
-  // return `type: Could not find '${commandName}'`;
+  return;
 }
