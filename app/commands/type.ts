@@ -16,11 +16,13 @@ export async function type(commandName: string): Promise<void> {
       continue;
     }
 
+    let lastPath;
     // Open the path
     for await (const d of await fs.promises.opendir(dir)) {
-      console.log(dir);
+      lastPath = dir;
+
       if (d.name == commandName) {
-        console.log(`${d.name} is ${d.parentPath || d.path}/${d.name}`);
+        console.log(`${d.name} is ${lastPath}/${d.name}`);
         return;
       }
     }
