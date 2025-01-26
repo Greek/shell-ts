@@ -28,6 +28,6 @@ export async function type(commandName: string): Promise<void> {
     }
   }
 
-  console.log(`${commandName}: command not found`);
+  console.log(`${commandName}: not found`);
   return;
 }
