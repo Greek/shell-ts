@@ -6,7 +6,9 @@ import fs from "node:fs";
  * @param {string} binary The name of the binary to find
  * @returns {Promise<boolean>} Result of the path search
  */
-export async function checkPathForBinary(binary: string): Promise<boolean> {
+export async function checkPathForBinary(
+  binary: string
+): Promise<{ name: string; dir?: string | null; exists: boolean }> {
   // Get the list of paths into an array
   const directories = process.env.PATH?.split(":");
 
@@ -26,14 +28,13 @@ export async function checkPathForBinary(binary: string): Promise<boolean> {
         continue;
       }
 
-      
       // Assuming it's a file, check if its name equals to the provided name.
       // If so, return true.
       if (f.name === binary) {
-        return true;
+        return { name: binary, dir, exists: true };
       }
     }
   }
 
-  return false;
+  return { name: binary, dir: null, exists: false };
 }

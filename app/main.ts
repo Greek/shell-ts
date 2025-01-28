@@ -46,7 +46,7 @@ export async function loop(retCode?: number) {
     }
 
     // Check if requested binary exists within path.
-    if (!(await checkPathForBinary(args[0]))) {
+    if (!(await checkPathForBinary(args[0])).exists) {
       console.log(`${inputCmd}: command not found`);
       loop();
       return;
@@ -80,7 +80,7 @@ export async function loop(retCode?: number) {
         // if (code == "ENOENT" || code == "ERR_INVALID_ARG_TYPE") {
         //   console.log(`${inputCmd}: command not found`);
         // }
-        
+
         console.error(err)
       }
       loop();

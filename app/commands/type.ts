@@ -1,4 +1,5 @@
 import fs from "fs";
+import { checkPathForBinary } from "../lib/path";
 
 export async function type(commandName: string): Promise<void> {
   const paths = process.env.PATH?.split(":") as string[];
@@ -8,26 +9,12 @@ export async function type(commandName: string): Promise<void> {
     return;
   }
 
-  for (const dir of paths) {
-    // Check if opening a dir throws. If it does, the dir can be ignored.
-    try {
-      await fs.promises.opendir(dir);
-    } catch (e) {
-      continue;
-    }
-
-    // Open the path
-    let lastPath;
-    for await (const d of await fs.promises.opendir(dir)) {
-      lastPath = dir;
-
-      if (d.name == commandName) {
-        console.log(`${d.name} is ${lastPath}/${d.name}`);
-        return;
-      }
-    }
+  const pathResult = await checkPathForBinary(commandName);
+  if (!pathResult.exists) { 
+    console.log(`${commandName}: not found`);
+    return;
   }
 
-  console.log(`${commandName}: not found`);
-  return;
+  console.log(`${commandName} is ${pathResult.dir}/${commandName}`)
+  return ;
 }
