@@ -2,14 +2,15 @@ import { createInterface } from "readline";
 import { ChildProcessWithoutNullStreams, spawn } from "node:child_process";
 import { type } from "./commands/type";
 import { echo } from "./commands/echo";
+import { checkPathForBinary } from "./lib/path";
 
 const rl = createInterface({
   input: process.stdin,
   output: process.stdout,
 });
 
-export function loop(retCode?: number) {
-  rl.question("$ ", (answer) => {
+export async function loop(retCode?: number) {
+  rl.question("$ ", async (answer) => {
     const args = answer.split(" ");
 
     if (retCode && retCode > 0) {
@@ -18,7 +19,7 @@ export function loop(retCode?: number) {
 
     // exit command
     if (args[0] == "exit") {
-      rl.close()
+      rl.close();
       return 0;
     }
 
@@ -44,6 +45,13 @@ export function loop(retCode?: number) {
       return;
     }
 
+    // Check if requested binary exists within path.
+    if (!(await checkPathForBinary(args[0]))) {
+      console.log(`${inputCmd}: command not found`);
+      loop();
+      return;
+    }
+  
     args.shift(); // Remove the first arg (the cmd) to provide other args to process
 
     let process: ChildProcessWithoutNullStreams;
@@ -69,15 +77,15 @@ export function loop(retCode?: number) {
     } catch (err) {
       if (err instanceof Error) {
         let code = (err as NodeJS.ErrnoException).code;
-        if (code == "ENOENT" || code == "ERR_INVALID_ARG_TYPE") {
-          console.log(`${inputCmd}: command not found`);
-        }
+        // if (code == "ENOENT" || code == "ERR_INVALID_ARG_TYPE") {
+        //   console.log(`${inputCmd}: command not found`);
+        // }
+        
+        console.error(err)
       }
       loop();
       return;
     }
-
-
   });
 }
 
